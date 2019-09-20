@@ -12,12 +12,14 @@
 echo "Setuid files:"
 echo "============="
 find / -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 3
+echo""
 ##############################################################################
 echo "Setgid files:"
 echo "============="
 find / -type f -executable -perm -2000 -ls 2>/dev/null | sort -k 3
+echo""
 ##############################################################################
 echo "10 largest files:"
 echo "============="
-find / -type f -executable -perm -2000 -ls 2>/dev/null | sort --buffer-size=M | sort -n -r | head
+find /home/ -type f -exec ls -alh --block-size=M {} \;| sort -n | head
 ###############################################################################
