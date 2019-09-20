@@ -18,8 +18,10 @@ echo "Setgid files:"
 echo "============="
 find / -type f -executable -perm -2000 -ls 2>/dev/null | sort -k 3
 echo""
+#2000 is the permission for Setgid
 ##############################################################################
 echo "10 largest files:"
 echo "============="
 find /home/ -type f -exec ls -alh --block-size=M {} \;| sort -n | head
 ###############################################################################
+echo""
