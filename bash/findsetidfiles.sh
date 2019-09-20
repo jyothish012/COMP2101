@@ -22,6 +22,6 @@ echo""
 ##############################################################################
 echo "10 largest files:"
 echo "============="
-find /home/ -type f -exec ls -alh --block-size=M {} \;| sort -n | head
+find /home/ -type f -exec ls -alh --block-size=M {} \;| sort -hr -k5 | head|awk '{print $3,$5,$9}'
 ###############################################################################
 echo""
