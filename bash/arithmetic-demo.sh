@@ -14,11 +14,17 @@ read firstnum
 echo " enter a number again please : "
 read secondnum
 sum=$((firstnum + secondnum))
+diffrence=$((firstnum - secondnum))
+product=$((firstnum * secondnum))
+remainder=$((firstnum % secondnum))
 dividend=$((firstnum / secondnum))
 fpdividend=$(awk "BEGIN{printf \"%.2f\", $firstnum/$secondnum}")
 
 cat <<EOF
 $firstnum plus $secondnum is $sum
-$firstnum divided by $secondnum is $dividend
+$firstnum minus $secondnum is $diffrence
+$firstnum muliplied by $secondnum is $product
+$firstnum modulus $secondnum is $remainder
+$firstnum divided by $secondnum gives $dividend with a remainder $remainder
   - More precisely, it is $fpdividend
 EOF
