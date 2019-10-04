@@ -17,8 +17,8 @@ echo "Rolling..."
 # roll the dice and save the results
 sides=6
 range=1
-die1=$(( RANDOM % sides + range))
-die2=$(( RANDOM % sides + range))
+die1=$(( RANDOM % "$sides" + "$range"))
+die2=$(( RANDOM % "$sides" + "$range"))
 # sum up the rolls
 sum=$(( die1 + die2 ))
 average=$((sum / 2))
