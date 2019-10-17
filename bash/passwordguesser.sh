@@ -20,7 +20,6 @@ else
   echo "you have $tries chances left"
 fi
 done
-echo "========"
-echo "you failed"
+
 
 #[ $myString = $referenceString ] && echo "You guessed the password!" || echo "The password eludes you..."

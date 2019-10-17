@@ -37,26 +37,24 @@
 
 # Task 1 move to variables
 
-# Task 1 move to variables
-lanAdd=$(ip a s $(ip a |awk '/: e/{gsub(/:/,"");print $2}')|awk '/inet /{gsub(/\/.*/,"");print $2}')
-lanHost=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
-extIP=$(curl -s icanhazip.com)
-extName=$(getent hosts $(curl -s icanhazip.com) | awk '{print $2}')
-# Task 2 router variables
-RouterAddress=$(ip route show | grep -i 'default via'| awk '{print $3 }')
-routName=$(getent hosts $router | awk '{print $2}')
-# Task 3 Network
-NetworkAddress=$(tail -n 1 /etc/networks | awk '{print $2}')
-NetworkName=$(tail -n 1  /etc/networks | awk '{print $1}')
+#lanAdd=$(ip a s $(ip a |awk '/: e/{gsub(/:/,"");print $2}')|awk '/inet /{gsub(/\/.*/,"");print $2}')
+myHostName=$(hostname)
+interfacename=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
+lanIpAddress=$(ip a s $interfacename|awk '/inet /{gsub(/\/.*/,"");print $2}')
+lanHostname=$(getent hosts $lanIpAddress | awk '{print $2}')
+externalIp=$(curl -s icanhazip.com)
+routerAddress=$(ip route | grep 'default'| awk '{print $3}')
+routerHostname=$(getent hosts $routerAddress | awk '{print $2}')
+networkAddress=$(route -n |awk '/255.255.255.0/''{print $1}')
+networkName=$(getent networks $networkAddress | awk '{print $1}')
 
 cat <<EOF
-Hostname        : $(hostname)
-LAN Address     : $lanAdd
-LAN Name        : $lanHost
-External IP     : $extIP
-External Name   : $extName
-Router Address  : $RouterAddress
-Router Hostname : $routName
-Network Number  : $NetworkAddress
-Network Name    : $NetworkName
+Hostname        : $myHostName
+LAN Address     : $lanIpAddress
+LAN Hostname    : $lanHostname
+External IP     : $externalIp
+Router Address  : $routerAddress
+Router Hostname : $routerHostname
+Network Number  : $networkAddress
+Network Name    : $routerHostname
 EOF
