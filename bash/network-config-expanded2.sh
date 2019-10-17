@@ -9,7 +9,7 @@
 #   External IP   : 1.2.3.4
 #   External Name : some.name.from.our.isp
 
-# the LAN info in this script uses a hardcoded interface name of "ens33"
+# the LAN info in this script uses a hardcoded interface name of "eno1"
 #    - change eno1 to whatever interface you have and want to gather info about in order to test the script
 
 # TASK 1: Dynamically identify the list of interface names for the computer running the script, and use a for loop to generate the report for every interface except loopback
@@ -61,29 +61,31 @@ EOF
 # Per-interface report
 #####
 # define the interface being summarized
-interface=ens33
+interface=$(ls /sys/class/net)
+for val in $interface; do
+if [ $val == "lo" ]; then
+  continue
+fi
+
 # Find an address and hostname for the interface being summarized
 # we are assuming there is only one IPV4 address assigned to this interface
-ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
+ipv4_address=$(ip a s $val|awk -F '[/ ]+' '/inet /{print $3}')
 ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 
 # Identify the network number for this interface and its name if it has one
-network_address=$(ip route list dev ens33 scope link|grep ker* | awk '{print$1}')
+network_address=$(ip route list dev $val scope link metric 100|cut -d ' ' -f 1)
 network_number=$(cut -d / -f 1 <<<"$network_address")
 network_name=$(getent networks $network_number|awk '{print $1}')
-routerAddress=$(ip route | grep 'default'| awk '{print $3}')
-routerHostname=$(getent hosts $routerAddress | awk '{print $2}')
 
 cat <<EOF
-Interface $interface:
+Interface $val:
 ===============
 Address         : $ipv4_address
 Name            : $ipv4_hostname
 Network Address : $network_address
-Network Name    : $routerHostname
+Network Name    : $network_name
 EOF
-
-
+done
 #####
 # End of per-interface report
 #####
