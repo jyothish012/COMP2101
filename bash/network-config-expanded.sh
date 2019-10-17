@@ -61,29 +61,32 @@ EOF
 # Per-interface report
 #####
 # define the interface being summarized
-interface=ens33
+interface=$(ls /sys/class/net)
+for net in $interface; do
+	if [ $net == "lo" ]; then
+		continue
+	fi
+
 # Find an address and hostname for the interface being summarized
 # we are assuming there is only one IPV4 address assigned to this interface
-ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
+ipv4_address=$(ip a s $net|awk -F '[/ ]+' '/inet /{print $3}')
 ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 
 # Identify the network number for this interface and its name if it has one
-network_address=$(ip route list dev ens33 scope link|grep ker* | awk '{print$1}')
+network_address=$(ip route list dev $net scope link|grep ker*| awk '{print$1}')
 network_number=$(cut -d / -f 1 <<<"$network_address")
 network_name=$(getent networks $network_number|awk '{print $1}')
-routerAddress=$(ip route | grep 'default'| awk '{print $3}')
-routerHostname=$(getent hosts $routerAddress | awk '{print $2}')
 
 cat <<EOF
-Interface $interface:
+Interface $net:
 ===============
 Address         : $ipv4_address
 Name            : $ipv4_hostname
 Network Address : $network_address
-Network Name    : $routerHostname
+Network Name    : $default_router_name
+
 EOF
-
-
+done
 #####
 # End of per-interface report
 #####
