@@ -7,6 +7,7 @@ while [ $# -gt 0 ]; do
   echo "There are $# things left to process on the command line."
   # display whatever is in $1
   echo '$1 has '"''$1' in it."
+
 # TASK 1: replace the echo command that just says processing with a case statement that
 #             recognizes the following command line options and tells the user if
 #             they were found on the command line
@@ -15,30 +16,30 @@ while [ $# -gt 0 ]; do
 #             save the debug level in a variable to be available to use later in the script
 #             display an error if the user gave the -d option without a number after it
 # TASK 3: put anything that wasn't recognized on the command line into a variable for use later in the script
-#  echo "Processing '$1'."
+  echo "Processing '$1'."
   case $1 in
     -h )
-    echo 'You added "-h" for help. '
+    echo " -h for help "
     ;;
     -v )
-    echo 'You added "-v" for varbose. '
+    echo "-v for verbose mode"
     ;;
-    -d )
-      case "$2" in
-        [1-5] )
-        echo "You added -d for debug level $2"
-        shift
-        ;;
-        *)
-        echo "The -d option must be followed with a number [1-5]. "
-        shift
-      esac
-    ;;
-    *)
-    err0rs=$1
-    echo "Error: unkown value $err0rs"
-    ;;
+	  -d )
+    case "$2" in
+       [1-5] )
+       echo "Your debug level is set to $2"
+       debuglvl=$2
+       ;;
+       *)
+       echo "error you should specifi a number with debug argument. "
+       read -p "you can enter the debug leven now since you didn't give it in the first place :" debuglvle
+       echo "Your debug level is set to $debuglvle"
     esac
+    ;;
+    * )
+    unrecvar=$*
+    shift
+  esac
   # each time through the loop, shift the arguments left
   # this decrements the argument count for us
   shift
